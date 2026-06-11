@@ -32,6 +32,39 @@ generated output contract that contradicts this baseline.
 
 ## SDK Output Comparison
 
-SDK-generated output has not been produced yet. Later generation slices must
-update this file with intentional differences between the baseline above and
-`packages/*/src/generated`.
+SDK-generated output now lives under `packages/*/src/generated`.
+
+The approved package names remain root-import packages:
+
+- `@radroots/core-bindings`
+- `@radroots/events-bindings`
+- `@radroots/events-indexed-bindings`
+- `@radroots/identity-bindings`
+- `@radroots/replica-db-schema-bindings`
+- `@radroots/trade-bindings`
+- `@radroots/types-bindings`
+
+The SDK intentionally does not emit `@radroots/tangle-db-schema-bindings`.
+The captured schema output is emitted from `@radroots/replica-db-schema-bindings`
+instead.
+
+Intentional differences from the legacy generated files:
+
+- generated headers now identify `cargo xtask generate ts`;
+- each package includes `src/generated/sdk-manifest.json`;
+- `@radroots/events-bindings` emits the captured `types.ts`, `constants.ts`,
+  and `kinds.ts` files and adds type-only imports from
+  `@radroots/core-bindings` so strict package compilation succeeds;
+- `@radroots/replica-db-schema-bindings` adds type-only imports from
+  `@radroots/types-bindings` for `IResult`, `IResultList`, and `IResultPass`;
+- `@radroots/trade-bindings` adds type-only imports from
+  `@radroots/core-bindings` and `@radroots/events-bindings`, plus a local
+  `bool` alias for the legacy generated spelling in the captured output;
+- `@radroots/events-indexed-bindings` has SDK-authored TypeScript for the
+  upstream wire structs because no committed legacy `typeshare` artifact was
+  discoverable.
+
+The SDK preserves the generated type and constant export names from the
+captured baseline. It does not preserve old package-local handwritten helpers
+such as runtime schemas or trade job-flow helper types that were not part of
+the captured generated output.
