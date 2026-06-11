@@ -34,9 +34,6 @@ pnpm -r build
 pnpm -r typecheck
 ```
 
-The import smoke workspace at `tests/import-smoke` verifies root imports from
-all approved binding packages.
-
 ## License
 
 Licensed under either of:
